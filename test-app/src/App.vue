@@ -2,17 +2,11 @@
   <!-- App.vue -->
 
   <v-app>
-    <v-app-bar 
-    app
-    color="primary">
-      <!-- -->
+    <v-app-bar app>
+      <NavComponent></NavComponent>
     </v-app-bar>
-
-    <!-- Sizes your content based upon application components -->
     <v-main>
-      <!-- Provides the application the proper gutter -->
       <v-container fluid>
-        <!-- If using vue-router -->
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -20,15 +14,26 @@
 </template>
 
 <script>
+import NavComponent from "./components/NavComponent.vue";
+
 
 export default {
   name: "App",
   components: {
-
+    NavComponent,
   },
 
   data: () => ({
     //
   }),
+  mounted(){
+    
+  }
 };
 </script>
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
+</style>

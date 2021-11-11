@@ -1,13 +1,14 @@
 <template>
   <div>
-    <h1 style="text-align: center">Yours Contacts:</h1>
-    <v-container style="max-width: 700px; padding: 20px">
+    <h1>Yours Contacts:</h1>
+    <v-container>
       <alert-component v-if="$store.state.alertContact"></alert-component>
       <v-card
         class="userClass"
         outlined
-        v-for="user in this.$store.state.users"
+        v-for="user in this.$store.getters.getUsers"
         :key="user.id"
+        elevation="2"
       >
         <v-row align="end" justify="end">
           <v-btn icon @click="deleted(user)">
@@ -33,15 +34,11 @@
     </v-container>
   </div>
 </template>
+
 <script>
 import alertComponent from "../components/alertComponent.vue";
 import axios from "axios";
-
 export default {
-  data: () => ({
-    alert: true,
-    user_id: 0,
-  }),
   components: {
     alertComponent,
   },
@@ -54,18 +51,22 @@ export default {
     deleted(user) {
       let vue = this;
       let id_user = user._id;
-      console.log(user)
       axios
         .delete("https://sandbox-internal.eternio.com/test/contact", {
           data: {
             id: id_user,
           },
         })
-        .then(vue.$store.state.users = vue.removeItemFromArr(vue.$store.state.users, user)
-        );
-      this.$store.state.alerText = "Contact deleted";
-      this.$store.state.alertContact = true;
-
+        .then(function (response) {
+          if (response.status == 200) {
+            vue.$store.state.users = vue.removeItemFromArr(
+              vue.$store.state.users,
+              user
+            );
+            vue.$store.state.alerText = "Contact deleted";
+            vue.$store.state.alertContact = true;
+          }
+        });
       setTimeout(() => {
         this.$store.state.alertContact = false;
       }, 2000);
@@ -78,7 +79,6 @@ export default {
       .get("https://sandbox-internal.eternio.com/test/contacts")
       .then(function (response) {
         vue.$store.state.users = response.data;
-        console.log(vue.$store.state.users);
       });
   },
 };
@@ -93,7 +93,6 @@ export default {
   margin-right: 5px;
   margin-top: 2px;
 }
-
 .userClass p b {
   margin-top: 2px;
   margin-left: 0;

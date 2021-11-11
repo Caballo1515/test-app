@@ -1,5 +1,4 @@
 <template>
-  <v-alert elevation="4" type="success">{{$store.state.alerText}}</v-alert>
+  <v-alert elevation="4" type="success">{{$store.getters.getAlertText}}</v-alert>
 </template>
-<script>
-</script>
+

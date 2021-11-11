@@ -6,15 +6,18 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     alerText: '',
-    alertContact: false,
     users: [],
+    alertContact: false
   },
-  mutations: {
-    
-  },
-  actions: {
-    
-  },
-  modules: {
-  }
+  getters: {
+    getUsers: state => {
+        return state.users;
+    },
+    getAlertText : state => {
+      return state.alerText
+    },
+    getAlertContact : state =>{
+      return state.alertContact
+    },
+}
 })

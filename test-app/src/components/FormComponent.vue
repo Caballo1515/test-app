@@ -1,27 +1,33 @@
 <template>
   <div class="form">
-    <h1 style="text-align: center">Add a Contact:</h1>
-
+    <h1>Add a Contact:</h1>
     <v-form ref="form" v-model="valid" lazy-validation @submit="submitForm()">
-      <v-container style="max-width: 700px; padding: 20px">
-        <alert-component v-if="alert"></alert-component>
+      <v-container>
         <v-row>
-          <v-text-field
-            v-model="user.prename"
-            :rules="defRules"
-            label="Prename"
-            required
-          ></v-text-field>
+          <v-col>
+            <alert-component v-if="alert"></alert-component>
+          </v-col>
         </v-row>
         <v-row>
-          <v-text-field
-            v-model="user.surname"
-            :rules="defRules"
-            label="Surname"
-            required
-          ></v-text-field>
+          <v-col>
+            <v-text-field
+              v-model="user.prename"
+              :rules="defRules"
+              label="Prename"
+              required
+            ></v-text-field>
+          </v-col>
         </v-row>
-
+        <v-row>
+          <v-col>
+            <v-text-field
+              v-model="user.surname"
+              :rules="defRules"
+              label="Surname"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col cols="9">
             <v-text-field
@@ -59,42 +65,57 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-text-field
-            v-model="user.mail"
-            :rules="emailRules"
-            label="E-mail"
-            required
-          ></v-text-field>
+          <v-col>
+            <v-text-field
+              v-model="user.mail"
+              :rules="emailRules"
+              label="E-mail"
+              required
+            ></v-text-field>
+          </v-col>
         </v-row>
-
-        <v-checkbox
-          v-model="user.newsletter"
-          label="Recieve Newsletter?"
-        ></v-checkbox>
-
-        <v-btn color="error" class="mr-4" @click="reset">Clear Form </v-btn>
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate"
-          >Save Content</v-btn
-        >
+        <v-col>
+          <v-checkbox
+            v-model="user.newsletter"
+            label="Recieve Newsletter?"
+          ></v-checkbox>
+        </v-col>
+        <v-row>
+          <v-col cols="6">
+            <v-btn color="primary" class="mr-4" @click="reset" width="430px">
+              Clear Form
+            </v-btn>
+          </v-col>
+          <v-col cols="6">
+            <v-btn
+              :disabled="!valid"
+              color="success"
+              class="mr-4"
+              @click="validate"
+              width="430px"
+              >Save Content</v-btn
+            >
+          </v-col>
+        </v-row>
       </v-container>
     </v-form>
   </div>
 </template>
 
 <script>
-import alertComponent from './alertComponent.vue';
-import axios from 'axios';
+import alertComponent from "./alertComponent.vue";
+import axios from "axios";
 export default {
   data: () => ({
-    user:{
-      prename: '',
-      surname: '',
-      street: '',
-      number: '',
-      postalCode: '',
-      city: '',
-      mail: '',
-      newsletter: false
+    user: {
+      prename: "",
+      surname: "",
+      street: "",
+      number: "",
+      postalCode: "",
+      city: "",
+      mail: "",
+      newsletter: false,
     },
     alert: false,
     valid: true,
@@ -110,26 +131,43 @@ export default {
   components: {
     alertComponent,
   },
-
   methods: {
-    submitForm(){
-      
-
-    },
     validate() {
-      //this.$refs.form.validate();
-      console.log(this.user);
-      axios.post("https://sandbox-internal.eternio.com/test/contact", this.user).then(
-        this.$store.state.alerText = 'Contact Saved',
-      this.alert = true
-      );
-     
-
-      
+      if (this.$refs.form.validate()) {
+        let vue = this;
+        axios
+          .post("https://sandbox-internal.eternio.com/test/contact", this.user)
+          .then(function (response) {
+            if (response.status == 201) {
+              vue.$store.state.alerText = "Contact Saved";
+              vue.alert = true;
+              vue.reset();
+              vue.resetUser();
+            }
+          });
+          this.alert= false;
+      }
     },
     reset() {
       this.$refs.form.reset();
     },
+    resetUser(){
+      this.user.prename = "";
+      this.user.surname = "";
+      this.user.street = "";
+      this.user.city = "";
+      this.user.number = "";
+      this.user.postalCode = "";
+      this.user.newsletter = false;
+      this.user.mail = "";
+
+    }
   },
 };
 </script>
+
+<style scoped>
+.mr-4 {
+  max-width: 100%;
+}
+</style>

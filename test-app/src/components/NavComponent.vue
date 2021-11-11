@@ -5,18 +5,16 @@
     align="center"
     >
       <v-col id="item">
-        <router-link to="/form">Save Contacts</router-link>
+        <router-link to="/" id="link">Save Contacts</router-link>
       </v-col>
-      <v-col id="item"> | </v-col>
-
+      <v-col id="item" tag="h3"> | </v-col>
       <v-col id="item">
-        <router-link to="/users">Show Contacts</router-link>
+        <router-link to="/show" id="link">Show Contacts</router-link>
       </v-col>
     </v-row>
   </nav>
 </template>
-<script>
-</script>
+
 <style scoped>
 nav {
     text-align: center;
@@ -31,7 +29,10 @@ nav {
     padding: 0;
     margin: 0;
 }
-a {
-  text-decoration: none;
+#link{
+  color: black;
+}
+#item .router-link-exact-active{
+  color: #24bf77;
 }
 </style>
